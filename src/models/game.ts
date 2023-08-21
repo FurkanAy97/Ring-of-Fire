@@ -1,8 +1,8 @@
 export class Game {
   public players: string[] = [];
   public stack: string[] = [];
-  public playerCard: string[] = [];
-  public player: number = 0;
+  public playedCards: string[] = [];
+  public currentPlayer: number = 0;
 
   constructor(){
     for (let index = 1; index < 14; index++) {
