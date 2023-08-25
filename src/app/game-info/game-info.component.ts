@@ -54,7 +54,6 @@ export class GameInfoComponent implements OnInit, OnChanges {
   @Input() card: any;
 
   ngOnInit(): void {
-    console.log(this.card);
   }
 
   ngOnChanges(): void {
