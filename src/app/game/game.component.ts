@@ -26,7 +26,7 @@ export class GameComponent implements OnInit {
   pickCardAnimation = false;
   currentCard: string = '';
   game: any;
-  collectionData$: any;
+  gameId!: string;
   unsubSingle: any;
 
   constructor(private route: ActivatedRoute, public dialog: MatDialog) {
@@ -40,22 +40,25 @@ export class GameComponent implements OnInit {
     this.newGame();
     console.log(this.game);
     this.route.params.subscribe((params) => {
+      this.gameId = params['id'];
       let collRef = collection(this.firestore, 'game');
-      this.unsubSingle = onSnapshot(
-        doc(collRef, params['id']),
-        (element) => {
-          let gameData: any = element.data();
-          this.game.currentPlayer = gameData['game']['currentPlayer'];
-          this.game.playedCards = gameData['game']['playedCards'];
-          this.game.players = gameData['game']['players'];
-          this.game.stack = gameData['game']['stack'];
-        }
-      );
+      this.unsubSingle = onSnapshot(doc(collRef, params['id']), (element) => {
+        let gameData: any = element.data();
+        this.game.currentPlayer = gameData['currentPlayer'];
+        this.game.playedCards = gameData['playedCards'];
+        this.game.players = gameData['players'];
+        this.game.stack = gameData['stack'];
+      });
     });
   }
 
   newGame(): void {
     this.game = new Game();
+  }
+
+  saveGame() {
+    const DocumentReference = doc(this.firestore, `game/${this.gameId}`);
+    return updateDoc(DocumentReference, this.game.toJson());
   }
 
   pickCard() {
@@ -66,10 +69,11 @@ export class GameComponent implements OnInit {
       this.game.currentPlayer++;
       this.game.currentPlayer =
         this.game.currentPlayer % this.game.players.length;
-
+      this.saveGame();
       setTimeout(() => {
         this.pickCardAnimation = false;
         this.game.playedCards.push(this.currentCard);
+        this.saveGame();
       }, 1000);
     }
     console.log(this.game);
@@ -81,6 +85,7 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe((name: string) => {
       if (name && name.length > 0) {
         this.game.players.push(name);
+        this.saveGame();
       }
     });
   }
