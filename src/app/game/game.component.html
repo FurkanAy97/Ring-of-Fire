@@ -12,19 +12,19 @@
     <img
       [ngStyle]="{ 'right.px': i * 5 }"
       *ngFor="let c of [1, 2, 3, 4, 5]; let i = index"
-      src="../../assets/img/cards/card_cover.png"
+      src="assets/img/cards/card_cover.png"
     />
     <img
       (click)="pickCard()"
       class="top-card"
       style="right: 25px"
-      src="../../assets/img/cards/card_cover.png"
+      src="assets/img/cards/card_cover.png"
     />
     <!-- played cards -->
     <img
       *ngFor="let card of game.playedCards"
       class="played-card"
-      src="../../assets/img/cards/{{ card }}.png"
+      src="assets/img/cards/{{ card }}.png"
     />
     <!-- Current card (animation) -->
     <img
@@ -33,7 +33,7 @@
     class="pick-card"
     [ngClass]="{ 'pick-card': game.pickCardAnimation }"
     style="right: 25px"
-    [src]="'../../assets/img/cards/' + game.currentCard + '.png'" 
+    [src]="'assets/img/cards/' + game.currentCard + '.png'" 
   />
   
   </div>
